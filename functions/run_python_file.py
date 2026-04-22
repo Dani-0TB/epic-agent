@@ -60,7 +60,7 @@ def run_python_file(working_directory, file_path, args=None):
         stderr_len = len(result.stderr)
         stdout_len = len(result.stdout)
 
-        if stdout_len == 0 and stdout_len == 0:
+        if stdout_len == 0 and stderr_len == 0:
             output_list.append("No output produced")
 
         if stdout_len > 0:
