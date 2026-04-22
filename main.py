@@ -1,10 +1,16 @@
 import os
-from dotenv import load_dotenv
-from google import genai
 import argparse
-from google.genai.errors import APIError
-from google.genai import types
 
+from dotenv import load_dotenv
+
+from google import genai
+from google.genai import types
+from google.genai.errors import APIError
+
+from prompts import system_prompt
+from functions.call_function import available_functions
+
+MODEL = "gemini-2.5-flash-lite"
 
 load_dotenv()
 api_key = os.environ.get("GEMINI_API_KEY")
@@ -28,8 +34,13 @@ messages = [types.Content(
 def main():
     try:
         response = client.models.generate_content(
-            model="gemini-2.5-flash-lite",
-            contents=messages)
+            model=MODEL,
+            contents=messages,
+            config=types.GenerateContentConfig(
+                temperature=0,
+                tools=[available_functions],
+                system_instruction=system_prompt),
+        )
     except APIError as e:
         print(f"Error with API Request: {e.message}")
         exit(1)
@@ -46,7 +57,12 @@ def main():
         print(f"Response tokens: {
               response.usage_metadata.candidates_token_count}")
 
-    print(f"Response\n{response.text}")
+    if response.function_calls:
+        for function_call in response.function_calls:
+            print(f"Calling function: {
+                  function_call.name}({function_call.args})")
+    else:
+        print(f"Response\n{response.text}")
 
     exit(0)
 
