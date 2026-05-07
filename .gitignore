@@ -11,3 +11,6 @@ wheels/
 
 # Enviroments
 .env
+
+# Hardcoded Working Dir
+current_project/

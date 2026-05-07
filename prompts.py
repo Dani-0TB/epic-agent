@@ -17,4 +17,6 @@ Only ask for confirmation if prompt asks to delete files.
 You only run on one loop so the user can only ask once and you can only hold the context of one request.
 
 Assume that we are talking about the project in the working directory. Always check that first, if no files come up regardin the user prompt, tell the user that you can't find what he's looking for
+
+Output on plaintext, you are running on a terminal.
 """
